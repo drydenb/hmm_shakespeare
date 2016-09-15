@@ -1,0 +1,44 @@
+This is a project for CS 155 at Caltech on generating Shakespearean sonnets 
+using Hidden Markov Models. 
+
+The code has been refactored and the directory tree has been restructured 
+by Dryden Bouamalay. 
+
+Original contributors to the project were: Ritwik Anand, Audrey Huang , and 
+Dryden Bouamalay.
+
+The final report is stored as a PDF as final_report.pdf 
+Late hours used: As many as needed from 17 remaining hours
+
+GUIDE TO CODE:
+
+	DIRECTORIES:
+		pickles
+			contains all the pickled numpy arrays, lists, and dictionaries used 
+			throughout all programs during poem generation 
+
+	PYTHON:
+		parse.py 
+			contains functions related to parsing the poems and generating 
+			dictionaries that map words to indices, etc. 
+		baum_welch.py 
+			this file implements forward-backward and the baum-welch algorithm 
+			to train a hidden markov model on unsupervised data. outputs the 
+			trained transition and observations matrices as .npy files into 
+			./pickles 
+		poetry_generation.py 
+			generates a poem with rhyming, syllable considerations, etc. 
+		visualization.py
+			code for investigating the meaning of the hidden states, etc.  
+
+	TEXT FILES:
+		shakespeare.txt 
+			the raw sonnet data
+		poems.txt 
+			some selected poems from the poetry generation step 
+
+	BASH:
+		train_hmms.sh
+			a script used for training multiple hidden markov models with 
+			various parameters 
+
