@@ -1,4 +1,3 @@
-# from __future__ import print_function
 from __future__ import division
 
 import os 
@@ -13,17 +12,12 @@ from tempfile import TemporaryFile
 from scipy.integrate import quad
 from scipy.linalg import norm
 
+
 ################################################################################
 # FUNCTION DEFINITIONS
 ################################################################################
 
-# command line arguments:
-#     [OBS PICKLE FILE]       the name of the pickle file storing the list of observations 
-#     [NUM DISTINCT OBS]      the number of distinct observations possible for the list 
-#                             of observations, i.e. 3232 means valid indices are from 0 to 3231 
-#     [NUM HIDDEN STATES]     the number of hidden states to use for this HMM 
-#     [tolerance]             the difference between the norms of A and O where we stop converging
-#     [OUTPUT PICKLE ID NUM]  the number to identify this HMM 
+
 def usage(argv):
 
     """
@@ -325,8 +319,6 @@ def baum_welch(L, M, obs, epsilon):
                 O_numer[:, o[m]] += np.sum(G, axis=1)
             O_denom += np.sum(G, axis=1)[:, None]
 
-            # print("Finished sample: ", o_count) 
-
         A = A_numer / A_denom 
         O = O_numer / O_denom 
 
@@ -335,13 +327,14 @@ def baum_welch(L, M, obs, epsilon):
             A[:,i] = np.divide(A[:,i], np.sum(A[:,i]))
             O[i,:] = np.divide(O[i,:], np.sum(O[i,:]))
 
-        # print out the difference between this iterations A, O matrices and the previous 
-        # iteration's matrices 
+        # print out the difference between this iterations A, O matrices and 
+        # the previous iteration's matrices 
         print "DELTA A: ", difference(A, A_prev)
         print "DELTA O: ", difference(O, O_prev)
 
         # convergence condition 
-        if (difference(A, A_prev) < epsilon) and (difference(O, O_prev) < epsilon):
+        if (difference(A, A_prev) < epsilon and 
+            difference(O, O_prev) < epsilon):
             break
 
     #ENDWHILE 
@@ -386,7 +379,6 @@ def find_mean_std(obs):
 # is the number of distinct observations possible for the list of observations, 
 # i.e. 10 x 3232 
 ################################################################################
-
 def main(argv):
 
     ########################################
@@ -443,25 +435,15 @@ def main(argv):
         usage(argv)
         sys.exit(1)
 
+    ########################################
+    # Train the matrices...
+    ########################################
+
     pickle_dir = "../data/pickles/"
-
-    # if len(sys.argv) != 6:
-    #   print("Usage:", sys.argv[0], """"[OBS PICKLE FILE] [NUM DISTINCT OBS] 
-    #       [NUM HIDDEN STATES] [tolerance] [OUTPUT PICKLE ID NUM]""")
-    #   sys.exit(1)  
-
-    # retrive command line arguments 
-    # obs_pickle = str(sys.argv[1])     # the name of the pickle file storing the list of observations  
-    # num_obs = int(sys.argv[2])         # the total number of distinct observations in our dataset 
-    # num_states = int(sys.argv[3])      # the number of hidden states to be used for our model 
-    # tolerance  = float(sys.argv[4])    # our tolerance for convergence 
-    # id_pickle = str(sys.argv[5])       # the id used for this HMM to output 
 
     # unpickle the list of observations 
     obs = pickle.load(open(obs_pickle, 'rb'))
     print "Number of samples in dataset is: ", len(obs)
-    # print(obs)
-    # sys.exit(0)
 
     # sanity check that no index in the dataset is >= num_obs or < 0.
     assert check_obs(num_obs, obs) == True    
@@ -498,20 +480,6 @@ def main(argv):
     transition_file.close() 
     observation_file.close() 
     start_file.close() 
-
-    # check that the pickled files are equivalent to the generated matrices 
-    # retrived_transition = np.load(os.getcwd() + '/pickles/transition_' + id_pickle + '.npy', 'r') 
-    # retrived_observation = np.load(os.getcwd() + '/pickles/observation_' + id_pickle + '.npy', 'r') 
-    # retrived_start = np.load(os.getcwd() + '/pickles/start_' + id_pickle + '.npy', 'r') 
-    # assert A.all() == retrived_transition.all()
-    # assert O.all() == retrived_observation.all()
-    # assert S.all() == retrived_start.all() 
-
-    # if you want to print a matrix to file to look at it 
-    # O_list = O.tolist()
-    # with open("observation.csv", "wb") as f:
-    #   writer = csv.writer(f)
-    #   writer.writerows(O_list)
 
     sys.exit() 
 
