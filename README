@@ -1,8 +1,9 @@
 This is a project for CS 155 at Caltech on generating Shakespearean sonnets 
 using Hidden Markov Models. 
 
-	The code has been refactored and the directory tree has been restructured 
-	by Dryden Bouamalay. 
+	The project as a whole is currently being restructured by Dryden Bouamalay. 
+	The EM algorithm is in src/baum_welch.py and is mostly representative of 
+	his coding style. 
 
 	Original contributors to the project were: Ritwik Anand, Audrey Huang, and 
 	Dryden Bouamalay.
