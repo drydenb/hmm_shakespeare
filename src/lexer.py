@@ -44,6 +44,10 @@ def t_NUMBER(t):
 #     r'\n+'
 #     t.lexer.lineno += len(t.value)
 
+# EOF handling rule
+# def t_EOF(t):
+#      return None
+
 # for error handling 
 def t_error(t):
     
@@ -64,8 +68,8 @@ with open('./data/raw/shakespeare.txt', 'r') as datafile:
 lexer.input(data)
 
 # Tokenize
-while True:
-    tok = lexer.token()
-    if not tok: 
-        break      # No more input
-    print(tok)
+# while True:
+#     tok = lexer.token()
+#     if not tok: 
+#         break      # No more input
+#     print(tok)
