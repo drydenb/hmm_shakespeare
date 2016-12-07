@@ -1,4 +1,5 @@
 import pprint
+import sys
 import enchant
 
 from data_parser import parser
@@ -39,13 +40,13 @@ def filter_data(data):
 		data[idx] = map(lambda l: [w for w in l if en_dict.check(w)], d)
 	return data
 
-def get_bidirectional(data):
+def get_hashes(data):
 
 	"""
 	From the flattened list of filtered data, create two hashes, one that maps 
 	a word to an id and one that maps the id back to the word. 
 	"""
-	
+
 	# flatten the flattened data once again to get a list of all tokens
 	tokens = flatten(data)
 
@@ -56,22 +57,28 @@ def get_bidirectional(data):
 
 	return id_to_token, token_to_id
 
-def make_indexed(data):
+def create_training(lines, token_to_id):
 
 	"""
-	Creates the training samples for the Baum-Welch algorithm. 
+	Takes in the flattened filtered data. Creates the training samples for the 
+	Baum-Welch algorithm. 
 	"""
 
-	pass
+	for idx, line in enumerate(lines):
+		lines[idx] = map(lambda t: token_to_id[t],line)
+	return lines
 
 result = get_data('./data/raw/shakespeare.txt')
 filtered = filter_data(result)
 flattened = flatten(filtered)
 
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(flattened)
-print len(flattened)
+id_to_token, token_to_id = get_hashes(flattened)
+training = create_training(flattened, token_to_id)
 
-id_to_token, token_to_id = get_bidirectional(flattened)
-pp.pprint(id_to_token)
-pp.pprint(token_to_id)
+pp = pprint.PrettyPrinter(indent=4)
+pp.pprint(training)
+# print len(flattened)
+
+
+# pp.pprint(id_to_token)
+# pp.pprint(token_to_id)
