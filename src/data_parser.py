@@ -3,7 +3,7 @@ import sys
 import pprint 
 
 # get the token map from the lexer
-from lexer import tokens
+from data_lexer import tokens
 
 def p_poems(p):
     '''
@@ -47,8 +47,8 @@ def p_elements(p):
         p[0].append(p[2])
 
 def p_element(p):
-    '''element : WORD
-               | QUOTE
+    '''element : STRING
+               | SINGLEQUOTE
                | COLON
                | COMMA
                | NUMBER
@@ -76,17 +76,16 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc(debug=True)
 
+# # Test it out
+# with open('./data/raw/shakespeare.txt', 'r') as datafile:
+#     data = datafile.read()
 
-# Test it out
-with open('./data/raw/shakespeare.txt', 'r') as datafile:
-    data = datafile.read()
+# s = data
+# result = parser.parse(s)
 
-s = data
-result = parser.parse(s)
-
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(result)
-# print(result)
-print("First result:")
-pp.pprint(result[0])
-pp.pprint(result[-1])
+# pp = pprint.PrettyPrinter(indent=4)
+# pp.pprint(result)
+# # print(result)
+# print("First result:")
+# pp.pprint(result[0])
+# pp.pprint(result[-1])

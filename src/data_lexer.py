@@ -3,8 +3,8 @@ import ply.lex as lex
 
 # all possible tokens in the poems 
 tokens = (
-	'WORD',
-	'QUOTE',
+	'STRING',
+	'SINGLEQUOTE',
 	'COLON',
 	'COMMA',
 	'NUMBER',
@@ -18,20 +18,24 @@ tokens = (
 	'RETURN',
 )
 
+# match words with apostrophes
+# http://stackoverflow.com/questions/2596893/regex-to-match-words-and-those-with-an-apostrophe
+# For simple string: r'\b([a-zA-Z]+)\b'
+
 # regular expression rules for tokens
-t_WORD      = r'\b([a-zA-Z]+)\b'
-t_QUOTE     = r'\''
-t_COLON     = r':'
-t_COMMA     = r','
-t_PERIOD    = r'\.'
-t_QMARK     = r'\?'
-t_HYPHEN    = r'-'
-t_SEMICOLON = r';'
-t_LPAREN    = r'\('
-t_RPAREN    = r'\)'
-t_BANG      = r'!'
-t_RETURN    = r'\n'
-t_ignore  = ' \t'    # ignore spaces and tabs 
+t_STRING          = r'\b([a-zA-Z]+)\b'
+t_SINGLEQUOTE     = r'\''
+t_COLON           = r':'
+t_COMMA           = r','
+t_PERIOD          = r'\.'
+t_QMARK           = r'\?'
+t_HYPHEN          = r'-'
+t_SEMICOLON       = r';'
+t_LPAREN          = r'\('
+t_RPAREN          = r'\)'
+t_BANG            = r'!'
+t_RETURN          = r'\n'
+t_ignore          = ' \t'    # ignore spaces and tabs 
 
 # numbers require a cast to int
 def t_NUMBER(t):
