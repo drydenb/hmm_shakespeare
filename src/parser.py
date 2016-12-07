@@ -18,7 +18,7 @@ def p_poems(p):
 
 def p_poem(p):
     'poem : NUMBER returns lines returns'
-    p[0] = [p[3]]
+    p[0] = p[3]
 
 def p_lines(p):
     '''
@@ -33,7 +33,7 @@ def p_lines(p):
 
 def p_line(p):
     'line : elements RETURN'
-    p[0] = [p[1]]
+    p[0] = p[1]
 
 def p_elements(p):
     '''
@@ -89,3 +89,4 @@ pp.pprint(result)
 # print(result)
 print("First result:")
 pp.pprint(result[0])
+pp.pprint(result[-1])
