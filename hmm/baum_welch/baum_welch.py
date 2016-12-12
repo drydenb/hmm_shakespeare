@@ -5,8 +5,13 @@ import sys
 import csv 
 import getopt
 import random 
-import pickle 
-import numpy as np 
+import pickle
+
+from time import gmtime, strftime
+
+import argparse
+
+import numpy as np
 
 from tempfile import TemporaryFile
 from scipy.integrate import quad
@@ -384,72 +389,42 @@ def find_mean_std(obs):
 ################################################################################
 def main(argv):
 
-    num_unique, train_data = process.process_data('./data/raw/shakespeare.txt')
-    print train_data
-    print num_unique
-
     ########################################
     # Parse command line arguments...
     ########################################
 
-    short_args = "hp:n:s:t:o:"
-    long_args = ["help", 
-                 "obs_pickle=", 
-                 "num_obs=", 
-                 "num_states=", 
-                 "tolerance=", 
-                 "id_pickle="]
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], short_args, long_args)
-    except getopt.GetoptError as err:
-        print str(err)    # print the err to stdout
-        usage(argv)       # print the usage statement
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Trains a hidden markov model using poetry data.")
+    parser.add_argument('-s', '--states',
+        type=int,
+        help='The number of hidden states for the model.',
+        required=True)
+    parser.add_argument('-t', '--tolerance',
+        type=float,
+        help='The difference at which we stop convergence ' 
+             'between the norms of the transition matrix A and '
+             'the observation matrix O.',
+        required=True)
 
-    obs_pickle = None
-    num_obs = None
-    num_states = None
-    tolerance = None
-    id_pickle = None
+    args = parser.parse_args()
 
-    try:
-        for o, a in opts:
-            if o in ("-h", "--help"):
-                usage(argv)
-                sys.exit()
-            elif o in ("-p", "--obs_pickle"):
-                obs_pickle = str(a) 
-            elif o in ("-n", "--num_obs"):
-                num_obs = int(a) 
-            elif o in ("-s", "--num_states"):
-                num_states = int(a)
-            elif o in ("-t", "--tolerance"):
-                tolerance = float(a)
-            elif o in ("-o", "--id_pickle"):
-                id_pickle = str(a)
-            else:
-                usage(argv)
-                sys.exit(1)
-    except ValueError:
-        usage(argv)
-        sys.exit(1)
-
-    if (obs_pickle is None or
-        num_obs is None or 
-        num_states is None or 
-        tolerance is None or 
-        id_pickle is None):
-        usage(argv)
-        sys.exit(1)
+    num_states = args.states
+    tolerance = args.tolerance 
+    id_pickle = strftime("%Y-%m-%d-%H:%M:%S", gmtime())
 
     ########################################
     # Train the matrices...
     ########################################
 
+    num_obs, obs = process.process_data('./data/raw/shakespeare.txt')
+
+    # print train_data
+    # print num_unique
+
     pickle_dir = "./data/pickles/"
 
     # unpickle the list of observations 
-    obs = pickle.load(open(obs_pickle, 'rb'))
+    # obs = pickle.load(open(obs_pickle, 'rb'))
     print "Number of samples in dataset is: ", len(obs)
 
     # sanity check that no index in the dataset is >= num_obs or < 0.
@@ -457,9 +432,9 @@ def main(argv):
 
     # output the mean and std_dev for this observation sequence with ID 
     (mean, std) = find_mean_std(obs)
-    mean_std_file = open(os.path.join(pickle_dir, 
-                                      'mean_std_' + id_pickle + '.txt'), 
-                         'w+')
+    mean_std_file = open(
+        os.path.join(pickle_dir, 'mean_std_' + id_pickle + '.txt'), 'w+'
+    )
     mean_std_file.write("Mean: " + str(mean) + '\n' + "SD: " + str(std) + '\n')
     mean_std_file.close()  
     
@@ -470,15 +445,12 @@ def main(argv):
     print "FINAL OBSERVATION MATRIX IS: \n", O 
 
     # pickle the results
-    transition_file = open(os.path.join(pickle_dir, 
-                                        'transition_' + id_pickle + '.npy'), 
-                           'w+')
-    observation_file = open(os.path.join(pickle_dir, 
-                                         'observation_' + id_pickle + '.npy'), 
-                            'w+')
-    start_file = open(os.path.join(pickle_dir, 
-                                   'start_' + id_pickle + '.npy'), 
-                      'w+')
+    transition_file = open(
+        os.path.join(pickle_dir, 'transition_' + id_pickle + '.npy'), 'w+')
+    observation_file = open(
+        os.path.join(pickle_dir, 'observation_' + id_pickle + '.npy'), 'w+')
+    start_file = open(
+        os.path.join(pickle_dir, 'start_' + id_pickle + '.npy'), 'w+')
 
     np.save(transition_file, A)
     np.save(observation_file, O)
