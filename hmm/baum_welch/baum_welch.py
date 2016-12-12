@@ -12,6 +12,9 @@ from tempfile import TemporaryFile
 from scipy.integrate import quad
 from scipy.linalg import norm
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from parser import process
+# print sys.path
 
 ################################################################################
 # FUNCTION DEFINITIONS
@@ -380,6 +383,10 @@ def find_mean_std(obs):
 # i.e. 10 x 3232 
 ################################################################################
 def main(argv):
+
+    num_unique, train_data = process.process_data('./data/raw/shakespeare.txt')
+    print train_data
+    print num_unique
 
     ########################################
     # Parse command line arguments...
