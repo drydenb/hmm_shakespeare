@@ -4,14 +4,16 @@ import enchant
 
 from data_parser import parser
 
+
 def flatten(lst):
 
 	"""
-	Flattens a list. Takes a list of lists such as [ [[],[],[]], [[],[],[]] ]
-	and returns [[], [], [], [], [], []]
+	Flattens a list. i.e., takes a list of lists such as 
+	[ [[],[],[]], [[],[],[]] ] and returns [ [], [], [], [], [], [] ]
 	"""
 
 	return [item for sublist in lst for item in sublist]
+
 
 def get_data(filename):
 	
@@ -28,6 +30,7 @@ def get_data(filename):
 		print "Unable to read data file:", filename
 		sys.exit(1) 
 
+
 def filter_data(data):
 	
 	"""
@@ -40,6 +43,7 @@ def filter_data(data):
 		data[idx] = map(lambda l: [w for w in l if en_dict.check(w)], d)
 	return data
 
+
 def get_hashes(data):
 
 	"""
@@ -50,12 +54,16 @@ def get_hashes(data):
 	# flatten the flattened data once again to get a list of all tokens
 	tokens = flatten(data)
 
-	# generate the hashes
+	# remove duplicate tokens
 	unique_tokens = set(tokens)
+	num_unique = len(unique_tokens)
+
+	# generate the hashes
 	id_to_token = dict(enumerate(unique_tokens))
 	token_to_id = {v : k for k,v in id_to_token.iteritems()}
 
-	return id_to_token, token_to_id
+	return num_unique, id_to_token, token_to_id
+
 
 def create_training(lines, token_to_id):
 
@@ -68,17 +76,18 @@ def create_training(lines, token_to_id):
 		lines[idx] = map(lambda t: token_to_id[t],line)
 	return lines
 
-result = get_data('./data/raw/shakespeare.txt')
-filtered = filter_data(result)
-flattened = flatten(filtered)
 
-id_to_token, token_to_id = get_hashes(flattened)
-training = create_training(flattened, token_to_id)
+def process_data(data):
 
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(training)
-# print len(flattened)
+	"""
+	Takes in the raw poem data filename, calculates the hashes needed, 
+	and returns them along with the number of unique words in the dataset.
+	"""
 
+	raw = get_data(data)
+	filtered = filter_data(raw)
+	flattened = flatten(filtered)
+	num_unique, id_to_token, token_to_id = get_hashes(flattened)
+	train_data = create_training(flattened, token_to_id)
 
-# pp.pprint(id_to_token)
-# pp.pprint(token_to_id)
+	return num_unique, train_data
