@@ -439,7 +439,7 @@ def main(argv):
     # Train the matrices...
     ########################################
 
-    pickle_dir = "../data/pickles/"
+    pickle_dir = "./data/pickles/"
 
     # unpickle the list of observations 
     obs = pickle.load(open(obs_pickle, 'rb'))
