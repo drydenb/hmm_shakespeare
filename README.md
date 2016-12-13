@@ -3,7 +3,7 @@
 ## Purpose
 
 This project implements from scratch the Baum-Welch algorithm to train a 
-Hidden Markov Model. In particular, this project trains a HMM using Shakespearan
+Hidden Markov Model. In particular, this project trains a HMM using Shakespearean
 poetry and generates sample sonnets using the model.
 
 This project arose out of a mini-project in machine learning for CS 155 at 
