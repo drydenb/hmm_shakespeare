@@ -7,10 +7,13 @@ Hidden Markov Model. In particular, this project trains a HMM using Shakespearan
 poetry and generates sample sonnets using the model.
 
 This project arose out of a mini-project in machine learning for CS 155 at 
-Caltech. The project has since been restructured and expanded, now using a CFG 
-via PLY for parsing training data and generally using better coding practices
-throughout the codebase as a whole. The contributors to the original project
-were Dryden Bouamalay, Ritwik Anand, and Audrey Huang.
+Caltech. The project has since been restructured and expanded, with all old 
+source code removed. The new project has been taken up by Dryden Bouamalay. The 
+contributors to the original project at Caltech were Dryden Bouamalay, Ritwik Anand, 
+and Audrey Huang.
+
+The data processing now utilizes a CFG (via PLY) for parsing training data and the 
+project generally uses better coding practices throughout the codebase as a whole.  
 
 ## Dependencies
 
