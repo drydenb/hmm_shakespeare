@@ -18,42 +18,12 @@ from scipy.integrate import quad
 from scipy.linalg import norm
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from parser import process
+from parse import process
 # print sys.path
 
 ################################################################################
 # FUNCTION DEFINITIONS
 ################################################################################
-
-
-def usage(argv):
-
-    """
-    Prints the usage statement for the script. 
-    """
-
-    print ("usage: " + 
-            str(argv[0]) +
-            " -p <pickle_file> -n <num_obs> -s <num_states> -t <tolerance> " + 
-            "-o <id_num>")
-    print """
-          Options:
-          -p [ --obs_pickle ]    The name of the pickle file storing the list 
-                                 of observations 
-          -n [ --num_obs ]       The number of distinct observations possible 
-                                 for the list of observations, i.e. 3232 means 
-                                 valid indices are from 0 to 3231 
-          -s [ --num_states ]    The number of hidden states to use for the HMM.
-          -t [ --tolerance ]     The difference at which we stop convergence 
-                                 between the norms of the transition and 
-                                 observation matrices A and O.   
-          -o [ --id_pickle ]     The number to identify this HMM. 
-
-          Example: 
-          python baum_welch.py ./pickles/sonnet_to_index.p 3232 10 0.01 
-          """
-    return 
-
 
 # transition matrix has rows as target state and columns as start state 
 def forward(S, A, O, obs):
