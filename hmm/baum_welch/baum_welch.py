@@ -337,8 +337,8 @@ def baum_welch(L, M, obs, epsilon):
 
         # print out the difference between this iterations A, O matrices and 
         # the previous iteration's matrices 
-        print "DELTA A: ", difference(A, A_prev)
-        print "DELTA O: ", difference(O, O_prev)
+        print "dA: ", difference(A, A_prev)
+        print "dO: ", difference(O, O_prev)
 
         # convergence condition 
         if (difference(A, A_prev) < epsilon and 
@@ -441,8 +441,8 @@ def main(argv):
     # perform training on the list of observations obs 
     (S, A, O) = baum_welch(num_states, num_obs, obs, tolerance) 
 
-    print "FINAL TRANSITION MATRIX IS: \n", A 
-    print "FINAL OBSERVATION MATRIX IS: \n", O 
+    print "Final transition matrix A: \n", A 
+    print "Final observation matrix O: \n", O 
 
     # pickle the results
     transition_file = open(
