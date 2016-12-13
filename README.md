@@ -9,7 +9,8 @@ poetry and generates sample sonnets using the model.
 This project arose out of a mini-project in machine learning for CS 155 at 
 Caltech. The project has since been restructured and expanded, now using a CFG 
 via PLY for parsing training data and generally using better coding practices
-throughout the codebase as a whole.
+throughout the codebase as a whole. The contributors to the original project
+were Dryden Bouamalay, Ritwik Anand, and Audrey Huang.
 
 ## Dependencies
 
