@@ -19,6 +19,7 @@ from scipy.linalg import norm
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from parse import process
+from generate import generate_poem
 # print sys.path
 
 ################################################################################
@@ -332,9 +333,11 @@ def check_obs(idx, obs):
     return True 
 
 def find_mean_std(obs):
+
     """
     Calculates the mean and standard deviation.
     """
+    
     lengths = [len(o) for o in obs]
     total_lines = len(lengths)
     arr_lengths = np.array(lengths)
@@ -401,34 +404,49 @@ def main(argv):
     assert check_obs(num_obs, obs) == True    
 
     # output the mean and std_dev for this observation sequence with ID 
-    (mean, std) = find_mean_std(obs)
-    mean_std_file = open(
-        os.path.join(pickle_dir, 'mean_std_' + id_pickle + '.txt'), 'w+'
-    )
-    mean_std_file.write("Mean: " + str(mean) + '\n' + "SD: " + str(std) + '\n')
-    mean_std_file.close()  
+    mean, std = find_mean_std(obs)
+
+    # mean_std_file = open(
+    #     os.path.join(pickle_dir, 'mean_std_' + id_pickle + '.txt'), 'w+'
+    # )
+    # mean_std_file.write("Mean: " + str(mean) + '\n' + "SD: " + str(std) + '\n')
+    # mean_std_file.close()  
     
     # perform training on the list of observations obs 
-    (S, A, O) = baum_welch(num_states, num_obs, obs, tolerance) 
+    S, A, O = baum_welch(num_states, num_obs, obs, tolerance) 
 
     print "Final transition matrix A: \n", A 
     print "Final observation matrix O: \n", O 
 
+    # print A.shape
+    # print S.shape
+    # print O.shape
+
+    # for idx, s in enumerate(S):
+    #     print idx, s
+
+    # print sum(S)
+    # print len(S)
+
     # pickle the results
-    transition_file = open(
-        os.path.join(pickle_dir, 'transition_' + id_pickle + '.npy'), 'w+')
-    observation_file = open(
-        os.path.join(pickle_dir, 'observation_' + id_pickle + '.npy'), 'w+')
-    start_file = open(
-        os.path.join(pickle_dir, 'start_' + id_pickle + '.npy'), 'w+')
+    # transition_file = open(
+    #     os.path.join(pickle_dir, 'transition_' + id_pickle + '.npy'), 'w+')
+    # observation_file = open(
+    #     os.path.join(pickle_dir, 'observation_' + id_pickle + '.npy'), 'w+')
+    # start_file = open(
+    #     os.path.join(pickle_dir, 'start_' + id_pickle + '.npy'), 'w+')
 
-    np.save(transition_file, A)
-    np.save(observation_file, O)
-    np.save(start_file, S) 
+    # np.save(transition_file, A)
+    # np.save(observation_file, O)
+    # np.save(start_file, S) 
 
-    transition_file.close() 
-    observation_file.close() 
-    start_file.close() 
+    # transition_file.close() 
+    # observation_file.close() 
+    # start_file.close() 
+
+    # now generate poems using the matrices
+    poem = generate_poem.generate_poem(mean, std, 14, A, O, S)
+    print poem
 
     sys.exit() 
 
