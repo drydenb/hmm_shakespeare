@@ -3,7 +3,8 @@
 # Developed by: Dryden Bouamalay
 # Purpose: Defines a lexer for parsing using PLY
 
-import sys 
+import os
+import sys
 import ply.lex as lex
 
 # all possible tokens in the poems 
@@ -55,7 +56,12 @@ def t_error(t):
 
 lexer = lex.lex()
 
-with open('./data/shakespeare.txt', 'r') as datafile:
+# find the data file
+parse_dir = os.path.dirname(os.path.realpath(__file__))
+data_dir = os.path.join(parse_dir, '..', '..', 'data')
+shakespeare_file = os.path.join(data_dir, 'shakespeare.txt')
+
+with open(shakespeare_file, 'r') as datafile:
 	data = datafile.read()
 
 lexer.input(data)

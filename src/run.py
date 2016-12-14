@@ -39,19 +39,21 @@ def main(argv):
     tolerance = args.tolerance 
     id_pickle = strftime("%Y-%m-%d-%H:%M:%S", gmtime())
 
+    src_dir = os.path.dirname(os.path.realpath(__file__))
+    data_dir = os.path.join(src_dir, '..', 'data')
+    shakespeare_file = os.path.join(data_dir, 'shakespeare.txt')
+
+    (
+        num_obs, 
+        id_to_token, 
+        token_to_id, 
+        obs
+    ) = process.process_data(shakespeare_file)
+
     ########################################
     # Train the matrices...
     ########################################
 
-    num_obs, id_to_token, token_to_id, obs = process.process_data('./data/shakespeare.txt')
-
-    # print train_data
-    # print num_unique
-
-    pickle_dir = "./data/pickles/"
-
-    # unpickle the list of observations 
-    # obs = pickle.load(open(obs_pickle, 'rb'))
     print "Number of samples in dataset is: ", len(obs), "\n"
 
     # sanity check that no index in the dataset is >= num_obs or < 0.

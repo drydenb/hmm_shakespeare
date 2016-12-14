@@ -80,17 +80,3 @@ def p_error(p):
 
 # Build the parser
 parser = yacc.yacc(debug=True)
-
-# # Test it out
-# with open('./data/raw/shakespeare.txt', 'r') as datafile:
-#     data = datafile.read()
-
-# s = data
-# result = parser.parse(s)
-
-# pp = pprint.PrettyPrinter(indent=4)
-# pp.pprint(result)
-# # print(result)
-# print("First result:")
-# pp.pprint(result[0])
-# pp.pprint(result[-1])
