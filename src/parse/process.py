@@ -90,4 +90,4 @@ def process_data(data):
 	num_unique, id_to_token, token_to_id = get_hashes(flattened)
 	train_data = create_training(flattened, token_to_id)
 
-	return num_unique, train_data
+	return num_unique, id_to_token, token_to_id, train_data

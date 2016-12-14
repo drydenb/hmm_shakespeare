@@ -6,11 +6,10 @@ import numpy as np
 def choose_idx(arr):
 
 	"""
-	Assume that arr is an array containing probabilities. Choose an index of
-	this array that uses these probabilities as weights.
+	Choose an index of the given array arr using its entries as weights.
 	"""
 
-	init = random.uniform(0, 1)
+	init = random.uniform(0, sum(arr))
 	upper = 0
 	for idx, a in enumerate(arr):
 		upper += a
@@ -34,7 +33,6 @@ def next_hidden(s, A):
 	hidden state. 
 	"""
 
-	# TODO: Fails frequently
 	return choose_idx(A[s])
 
 def emit(s, O):
@@ -46,6 +44,22 @@ def emit(s, O):
 
 	return choose_idx(O[s])
 
+def map_to_words(poem, id_to_token):
+
+	""" 
+	Convert the poem we generated from word ids back to English words. 
+	"""
+
+	return [map(lambda w: id_to_token[w], line) for line in poem]
+
+def pretty_print_poem(poem):
+
+	"""
+	Pretty prints a poem to STDOUT 
+	"""
+
+	for line in poem:
+		print " ".join(line)
 
 def generate_line(state, line_length, A, O):
 

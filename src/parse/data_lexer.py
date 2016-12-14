@@ -65,7 +65,7 @@ def t_error(t):
 lexer = lex.lex()
 
 # Test it out
-with open('./data/raw/shakespeare.txt', 'r') as datafile:
+with open('./data/shakespeare.txt', 'r') as datafile:
 	data = datafile.read()
 
 # Give the lexer some input
