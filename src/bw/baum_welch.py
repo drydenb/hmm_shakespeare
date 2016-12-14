@@ -247,8 +247,12 @@ def baum_welch(L, M, obs, epsilon):
     O_numer = np.zeros(np.shape(O))
     O_denom = np.ones(L)[:,None] 
 
+    epoch_count = 0
+
     # construct a do-while loop in python  
     while True:
+
+        epoch_count +=1 
 
         A_prev = A
         O_prev = O 
@@ -307,9 +311,10 @@ def baum_welch(L, M, obs, epsilon):
             O[i,:] = np.divide(O[i,:], np.sum(O[i,:]))
 
         # print out the difference between this iterations A, O matrices and 
-        # the previous iteration's matrices 
-        print "dA: ", difference(A, A_prev)
-        print "dO: ", difference(O, O_prev)
+        # the previous iteration's matrices
+        print "Epoch ", epoch_count
+        print "dA : ", difference(A, A_prev)
+        print "dO : ", difference(O, O_prev), "\n"
 
         # convergence condition 
         if (difference(A, A_prev) < epsilon and 
@@ -389,7 +394,7 @@ def main(argv):
     # Train the matrices...
     ########################################
 
-    num_obs, obs = process.process_data('./data/raw/shakespeare.txt')
+    num_obs, id_to_token, token_to_id, obs = process.process_data('./data/shakespeare.txt')
 
     # print train_data
     # print num_unique
@@ -398,7 +403,7 @@ def main(argv):
 
     # unpickle the list of observations 
     # obs = pickle.load(open(obs_pickle, 'rb'))
-    print "Number of samples in dataset is: ", len(obs)
+    print "Number of samples in dataset is: ", len(obs), "\n"
 
     # sanity check that no index in the dataset is >= num_obs or < 0.
     assert check_obs(num_obs, obs) == True    
@@ -415,38 +420,16 @@ def main(argv):
     # perform training on the list of observations obs 
     S, A, O = baum_welch(num_states, num_obs, obs, tolerance) 
 
-    print "Final transition matrix A: \n", A 
-    print "Final observation matrix O: \n", O 
-
-    # print A.shape
-    # print S.shape
-    # print O.shape
-
-    # for idx, s in enumerate(S):
-    #     print idx, s
-
-    # print sum(S)
-    # print len(S)
-
-    # pickle the results
-    # transition_file = open(
-    #     os.path.join(pickle_dir, 'transition_' + id_pickle + '.npy'), 'w+')
-    # observation_file = open(
-    #     os.path.join(pickle_dir, 'observation_' + id_pickle + '.npy'), 'w+')
-    # start_file = open(
-    #     os.path.join(pickle_dir, 'start_' + id_pickle + '.npy'), 'w+')
-
-    # np.save(transition_file, A)
-    # np.save(observation_file, O)
-    # np.save(start_file, S) 
-
-    # transition_file.close() 
-    # observation_file.close() 
-    # start_file.close() 
+    print "Final transition matrix A: \n", A, "\n"
+    print "Final observation matrix O: \n", O, "\n"
 
     # now generate poems using the matrices
-    poem = generate_poem.generate_poem(mean, std, 14, A, O, S)
-    print poem
+    SONNET_LINES = 14 
+
+    print "Generated poem:"
+    id_poem = generate_poem.generate_poem(mean, std, SONNET_LINES, A, O, S)
+    poem = generate_poem.map_to_words(id_poem, id_to_token)
+    generate_poem.pretty_print_poem(poem)
 
     sys.exit() 
 
