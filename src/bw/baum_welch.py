@@ -18,12 +18,9 @@ from tempfile import TemporaryFile
 from scipy.integrate import quad
 from scipy.linalg import norm
 
-################################################################################
-# FUNCTION DEFINITIONS
-################################################################################
-
 # transition matrix has rows as target state and columns as start state 
 def forward(S, A, O, obs):
+
     """ 
     Calculates the forward probability matrix F. This is a matrix where each 
     (i, j) entry represents P(o_1, o_2, ... o_j, X_t = i| A, O). In other words, 
@@ -75,6 +72,7 @@ def forward(S, A, O, obs):
 
 
 def backward(A, O, C, obs): 
+
     """ 
     Calculates the backward probability matrix B. This is a matrix where each 
     (i, j) entry represents P(o_(j + 1), o_(j + 1), ... o_M | X_t = i). Each 
@@ -115,6 +113,7 @@ def backward(A, O, C, obs):
 
 
 def gamma(S, F, B): 
+
     """
     Computes the gamma matrix G. This is a matrix where each (i, j) entry 
     represents gamma_j(i) = P(X_j = i | o_1, ... o_M, S, A, O). This is the 
@@ -186,20 +185,25 @@ def xi(A, O, S, F, B):
 
 
 def difference(A, B):
+
     """ 
     This function compututes the difference between matrices A and O (entrywise) 
     and then returns the Frobenius norm of their difference. This acts as a 
     tolerance for our convergence condition.
     """
+
     T = A - B
     return norm(T)
 
-
 def indicator(a, b):
+
+    """
+    Make a standard indicator function.
+    """
+
     if (a == b):
         return 1
     return 0 
-
 
 def baum_welch(L, M, obs, epsilon): 
 
@@ -323,10 +327,12 @@ def baum_welch(L, M, obs, epsilon):
     return (S,A,O) 
 
 def check_obs(idx, obs):
+
     """ 
     Checks every term in every sequence of obs and sees if any term is >= idx 
     or < 0. If true, returns false. Otherwise returns true.  
     """
+
     for o in obs: 
         for term in o: 
             if (term >= idx) or (term < 0):  

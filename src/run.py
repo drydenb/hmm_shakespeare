@@ -9,15 +9,23 @@ import argparse
 
 from time import gmtime, strftime
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 
+                                                '..')))
 from parse import process
 from generate import generate_poem
 from bw import baum_welch
 
 def main(argv):
 
+    """
+    After parsing the number of desired hidden states & the tolerance from 
+    the command line, train a hidden markov model on the poems using the raw
+    dataset. After the model is trained, use it to generate a poem from a 
+    random seed sampled from the starting distribution of the model.
+    """
+
     ########################################
-    # Parse command line arguments...
+    # Parse command line arguments and initialize
     ########################################
 
     parser = argparse.ArgumentParser(
@@ -51,7 +59,7 @@ def main(argv):
     ) = process.process_data(shakespeare_file)
 
     ########################################
-    # Train the matrices...
+    # Train the HMM
     ########################################
 
     print "Number of samples in dataset is: ", len(obs), "\n"
@@ -68,7 +76,10 @@ def main(argv):
     print "Final transition matrix A: \n", A, "\n"
     print "Final observation matrix O: \n", O, "\n"
 
-    # now generate poems using the matrices
+    ########################################
+    # Generate a sample poem
+    ########################################
+
     SONNET_LINES = 14 
 
     print "Generated poem:"
@@ -76,7 +87,7 @@ def main(argv):
     poem = generate_poem.map_to_words(id_poem, id_to_token)
     generate_poem.pretty_print_poem(poem)
 
-    sys.exit() 
+    sys.exit()
 
 ################################################################################
 # MAIN

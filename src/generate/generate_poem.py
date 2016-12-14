@@ -59,7 +59,7 @@ def map_to_words(poem, id_to_token):
 def pretty_print_poem(poem):
 
 	"""
-	Pretty prints a poem to STDOUT 
+	Pretty prints a poem to STDOUT.
 	"""
 
 	for line in poem:
@@ -67,7 +67,10 @@ def pretty_print_poem(poem):
 
 def generate_line(state, line_length, A, O):
 
-	""" 
+	"""
+	Given a current hidden state, generate a new line by emitting an observation
+	and then transitioning to a new hidden state. Repeat until the line is as 
+	long as the line_length parameter.
 	"""
 
 	line = []
@@ -80,6 +83,8 @@ def generate_line(state, line_length, A, O):
 def generate_poem(mu, sigma, num_lines, A, O, S):
 
 	"""
+	Given a mean line length mu and standard deviation sigma, generate a 
+	poem consisting of num_lines by calling generate_line().
 	"""
 
 	poem = []
