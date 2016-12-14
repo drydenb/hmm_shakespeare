@@ -12,19 +12,11 @@ import getopt
 import random 
 import pickle
 
-from time import gmtime, strftime
-
-import argparse
-
 import numpy as np
 
 from tempfile import TemporaryFile
 from scipy.integrate import quad
 from scipy.linalg import norm
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from parse import process
-from generate import generate_poem
 
 ################################################################################
 # FUNCTION DEFINITIONS
@@ -353,97 +345,3 @@ def find_mean_std(obs):
     mean = np.mean(arr_lengths)
     std_dev = np.std(arr_lengths)
     return (mean, std_dev)
-
-################################################################################
-## MAIN
-# 10 hidden states is a good testing number. The code can't handle much more 
-# than 100 states. Each pass on the dataset will print out the tolerances so you 
-# can see if you're converging fast enough. 
-# 
-# The output of A is a L x L matrix where L is the number of hidden states used. 
-# the format of this matrix is structured such that the rows represent the 
-# TARGET states and the columns represent the START states. so (i, j) represents 
-# the probability of transitioning from the jth state to the ith state. 
-#
-# The output of O is a L x M matrix where L is the number of hidden states and M 
-# is the number of distinct observations possible for the list of observations, 
-# i.e. 10 x 3232 
-################################################################################
-def main(argv):
-
-    ########################################
-    # Parse command line arguments...
-    ########################################
-
-    parser = argparse.ArgumentParser(
-        description="Trains a hidden markov model using poetry data.")
-    parser.add_argument('-s', '--states',
-        type=int,
-        help='The number of hidden states for the model.',
-        required=True)
-    parser.add_argument('-t', '--tolerance',
-        type=float,
-        help='The difference at which we stop convergence ' 
-             'between the norms of the transition matrix A and '
-             'the observation matrix O.',
-        required=True)
-
-    args = parser.parse_args()
-
-    num_states = args.states
-    tolerance = args.tolerance 
-    id_pickle = strftime("%Y-%m-%d-%H:%M:%S", gmtime())
-
-    ########################################
-    # Train the matrices...
-    ########################################
-
-    num_obs, id_to_token, token_to_id, obs = process.process_data('./data/shakespeare.txt')
-
-    # print train_data
-    # print num_unique
-
-    pickle_dir = "./data/pickles/"
-
-    # unpickle the list of observations 
-    # obs = pickle.load(open(obs_pickle, 'rb'))
-    print "Number of samples in dataset is: ", len(obs), "\n"
-
-    # sanity check that no index in the dataset is >= num_obs or < 0.
-    assert check_obs(num_obs, obs) == True    
-
-    # output the mean and std_dev for this observation sequence with ID 
-    mean, std = find_mean_std(obs)
-
-    # mean_std_file = open(
-    #     os.path.join(pickle_dir, 'mean_std_' + id_pickle + '.txt'), 'w+'
-    # )
-    # mean_std_file.write("Mean: " + str(mean) + '\n' + "SD: " + str(std) + '\n')
-    # mean_std_file.close()  
-    
-    # perform training on the list of observations obs 
-    S, A, O = baum_welch(num_states, num_obs, obs, tolerance) 
-
-    print "Final transition matrix A: \n", A, "\n"
-    print "Final observation matrix O: \n", O, "\n"
-
-    # now generate poems using the matrices
-    SONNET_LINES = 14 
-
-    print "Generated poem:"
-    id_poem = generate_poem.generate_poem(mean, std, SONNET_LINES, A, O, S)
-    poem = generate_poem.map_to_words(id_poem, id_to_token)
-    generate_poem.pretty_print_poem(poem)
-
-    sys.exit() 
-
-################################################################################
-# MAIN
-################################################################################
-
-if __name__ == '__main__':
-    main(sys.argv)
-
-
-    
-
