@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+# Developed by: Dryden Bouamalay
+# Purpose: Implements functions for processing data after parsing
+
 import pprint
 import sys
 import enchant

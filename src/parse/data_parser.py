@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+# Developed by: Dryden Bouamalay
+# Purpose: Defines a context free grammar using PLY for parsing
+
 import ply.yacc as yacc
 import sys
 import pprint 

@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+# Developed by: Dryden Bouamalay
+# Purpose: Defines a lexer for parsing using PLY
+
 import sys 
 import ply.lex as lex
 
@@ -17,10 +22,6 @@ tokens = (
 	'BANG',
 	'RETURN',
 )
-
-# match words with apostrophes
-# http://stackoverflow.com/questions/2596893/regex-to-match-words-and-those-with-an-apostrophe
-# For simple string: r'\b([a-zA-Z]+)\b'
 
 # regular expression rules for tokens
 t_STRING          = r'\b([a-zA-Z]+)\b'
@@ -43,15 +44,6 @@ def t_NUMBER(t):
     t.value = int(t.value)    
     return t
 
-# for line numbers 
-# def t_newline(t):
-#     r'\n+'
-#     t.lexer.lineno += len(t.value)
-
-# EOF handling rule
-# def t_EOF(t):
-#      return None
-
 # for error handling 
 def t_error(t):
     
@@ -61,19 +53,9 @@ def t_error(t):
     # it is not acceptable to fail to parse something
     sys.exit(1)
 
-# Build the lexer
 lexer = lex.lex()
 
-# Test it out
 with open('./data/shakespeare.txt', 'r') as datafile:
 	data = datafile.read()
 
-# Give the lexer some input
 lexer.input(data)
-
-# Tokenize
-# while True:
-#     tok = lexer.token()
-#     if not tok: 
-#         break      # No more input
-#     print(tok)

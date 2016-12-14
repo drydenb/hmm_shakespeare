@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+# Developed by: Dryden Bouamalay
+# Purpose: Implements the Baum-Welch algorithm
+
 from __future__ import division
 
 import os 
@@ -20,7 +25,6 @@ from scipy.linalg import norm
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from parse import process
 from generate import generate_poem
-# print sys.path
 
 ################################################################################
 # FUNCTION DEFINITIONS

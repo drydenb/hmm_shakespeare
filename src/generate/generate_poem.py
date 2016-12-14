@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+# Developed by: Dryden Bouamalay
+# Purpose: Functions for generating poems using a trained HMM
 
 import sys
 import random 
