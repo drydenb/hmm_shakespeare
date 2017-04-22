@@ -57,9 +57,9 @@ def t_error(t):
 lexer = lex.lex()
 
 # find the data file
-parse_dir = os.path.dirname(os.path.realpath(__file__))
-data_dir = os.path.join(parse_dir, '..', '..', 'data')
-shakespeare_file = os.path.join(data_dir, 'shakespeare.txt')
+file_dir = os.path.dirname(os.path.realpath(__file__))
+resources_dir = os.path.join(file_dir, 'resources')
+shakespeare_file = os.path.join(resources_dir, 'shakespeare.txt')
 
 with open(shakespeare_file, 'r') as datafile:
 	data = datafile.read()

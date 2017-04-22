@@ -9,11 +9,20 @@ import argparse
 
 from time import gmtime, strftime
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 
-                                                '..')))
-from parse import process
-from generate import generate_poem
-from bw import baum_welch
+# sys.path.insert(
+#     0,
+#     os.path.abspath(
+#         os.path.join(os.path.dirname(__file__), '..', 'hmm')
+#     )
+# )
+
+from hmm import process
+from hmm import baum_welch
+from hmm import generate_poem
+
+# from parse import process
+# from generate import generate_poem
+# from bw import baum_welch
 
 def main(argv):
 
@@ -47,16 +56,12 @@ def main(argv):
     tolerance = args.tolerance 
     id_pickle = strftime("%Y-%m-%d-%H:%M:%S", gmtime())
 
-    src_dir = os.path.dirname(os.path.realpath(__file__))
-    data_dir = os.path.join(src_dir, '..', 'data')
-    shakespeare_file = os.path.join(data_dir, 'shakespeare.txt')
-
     (
         num_obs, 
         id_to_token, 
         token_to_id, 
         obs
-    ) = process.process_data(shakespeare_file)
+    ) = process.process_data()
 
     ########################################
     # Train the HMM
@@ -65,7 +70,7 @@ def main(argv):
     print "Number of samples in dataset is: ", len(obs), "\n"
 
     # sanity check that no index in the dataset is >= num_obs or < 0.
-    assert baum_welch.check_obs(num_obs, obs) == True    
+    assert baum_welch.check_obs(num_obs, obs)
 
     # output the mean and std_dev for this observation sequence with ID 
     mean, std = baum_welch.find_mean_std(obs)

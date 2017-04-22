@@ -5,6 +5,7 @@
 
 import pprint
 import sys
+import os
 import enchant
 
 from data_parser import parser
@@ -20,20 +21,25 @@ def flatten(lst):
 	return [item for sublist in lst for item in sublist]
 
 
-def get_data(filename):
+def get_data():
 	
 	"""
 	Takes a filename containing raw poem data and produces a list of poems,
 	each of which is a list of lines containing tokens.
 	"""
 
-	try:
-		with open(filename, 'r') as datafile:
-			data = datafile.read()
-			return parser.parse(data)
-	except IOError:
-		print "Unable to read data file:", filename
-		sys.exit(1) 
+	# try:
+	file_dir = os.path.dirname(os.path.realpath(__file__))
+	resources_dir = os.path.join(file_dir, 'resources')
+	shakespeare_file = os.path.join(resources_dir, 'shakespeare.txt')
+
+	with open(shakespeare_file, 'r') as datafile:
+		data = datafile.read()
+		return parser.parse(data)
+
+	# except IOError:
+	# 	print "Unable to read data file:", filename
+	# 	sys.exit(1)
 
 
 def filter_data(data):
@@ -82,14 +88,14 @@ def create_training(lines, token_to_id):
 	return lines
 
 
-def process_data(data):
+def process_data():
 
 	"""
 	Takes in the raw poem data filename, calculates the hashes needed, 
 	and returns them along with the number of unique words in the dataset.
 	"""
 
-	raw = get_data(data)
+	raw = get_data()
 	filtered = filter_data(raw)
 	flattened = flatten(filtered)
 	num_unique, id_to_token, token_to_id = get_hashes(flattened)
