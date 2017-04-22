@@ -9,19 +9,19 @@ import ply.lex as lex
 
 # all possible tokens in the poems 
 tokens = (
-	'STRING',
-	'SINGLEQUOTE',
-	'COLON',
-	'COMMA',
-	'NUMBER',
-	'PERIOD',
-	'QMARK',
-	'HYPHEN',
-	'SEMICOLON',
-	'LPAREN',
-	'RPAREN',
-	'BANG',
-	'RETURN',
+    'STRING',
+    'SINGLEQUOTE',
+    'COLON',
+    'COMMA',
+    'NUMBER',
+    'PERIOD',
+    'QMARK',
+    'HYPHEN',
+    'SEMICOLON',
+    'LPAREN',
+    'RPAREN',
+    'BANG',
+    'RETURN',
 )
 
 # regular expression rules for tokens
@@ -62,6 +62,6 @@ resources_dir = os.path.join(file_dir, 'resources')
 shakespeare_file = os.path.join(resources_dir, 'shakespeare.txt')
 
 with open(shakespeare_file, 'r') as datafile:
-	data = datafile.read()
+    data = datafile.read()
 
 lexer.input(data)

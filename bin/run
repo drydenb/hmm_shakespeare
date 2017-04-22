@@ -3,26 +3,12 @@
 # Developed by: Dryden Bouamalay
 # Purpose: To train an HMM and generate a poem from start to finish
 
-import os
 import sys
 import argparse
-
-from time import gmtime, strftime
-
-# sys.path.insert(
-#     0,
-#     os.path.abspath(
-#         os.path.join(os.path.dirname(__file__), '..', 'hmm')
-#     )
-# )
-
 from hmm import process
 from hmm import baum_welch
 from hmm import generate_poem
 
-# from parse import process
-# from generate import generate_poem
-# from bw import baum_welch
 
 def main(argv):
 
@@ -54,7 +40,6 @@ def main(argv):
 
     num_states = args.states
     tolerance = args.tolerance 
-    id_pickle = strftime("%Y-%m-%d-%H:%M:%S", gmtime())
 
     (
         num_obs, 

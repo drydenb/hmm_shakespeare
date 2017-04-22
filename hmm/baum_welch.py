@@ -3,20 +3,11 @@
 # Developed by: Dryden Bouamalay
 # Purpose: Implements the Baum-Welch algorithm
 
+
 from __future__ import division
-
-import os 
-import sys 
-import csv 
-import getopt
-import random 
-import pickle
-
 import numpy as np
-
-from tempfile import TemporaryFile
-from scipy.integrate import quad
 from scipy.linalg import norm
+
 
 # transition matrix has rows as target state and columns as start state 
 def forward(S, A, O, obs):
@@ -346,7 +337,6 @@ def find_mean_std(obs):
     """
     
     lengths = [len(o) for o in obs]
-    total_lines = len(lengths)
     arr_lengths = np.array(lengths)
     mean = np.mean(arr_lengths)
     std_dev = np.std(arr_lengths)

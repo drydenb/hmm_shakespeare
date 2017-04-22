@@ -5,10 +5,10 @@
 
 import ply.yacc as yacc
 import sys
-import pprint 
 
 # get the token map from the lexer
 from data_lexer import tokens
+
 
 def p_poems(p):
     '''
@@ -21,9 +21,11 @@ def p_poems(p):
         p[0] = p[1]
         p[0].append(p[2])
 
+
 def p_poem(p):
     'poem : NUMBER returns lines returns'
     p[0] = p[3]
+
 
 def p_lines(p):
     '''
@@ -36,9 +38,11 @@ def p_lines(p):
         p[0] = p[1]
         p[0].append(p[2])
 
+
 def p_line(p):
     'line : elements RETURN'
     p[0] = p[1]
+
 
 def p_elements(p):
     '''
@@ -50,6 +54,7 @@ def p_elements(p):
     else:
         p[0] = p[1]
         p[0].append(p[2])
+
 
 def p_element(p):
     '''element : STRING
@@ -66,17 +71,20 @@ def p_element(p):
                | BANG'''
     p[0] = str(p[1])
 
+
 def p_returns(p):
     '''
     returns : returns RETURN
     returns : RETURN
     '''
 
+
 # Error rule for syntax errors
 def p_error(p):
     print("Syntax error in input!")
     print(p)
     sys.exit(1)
+
 
 # Build the parser
 parser = yacc.yacc(debug=True)
