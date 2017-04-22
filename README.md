@@ -21,33 +21,30 @@ The project uses a context-free grammar (via PLY) for parsing the poems to
 create training data. This training data is then fed to the Baum-Welch algorithm
 to train matrices. Finally, these matrices are used to generate a sample poem.
 
-## Dependencies
+## Installation
 
-Install Python dependencies using a virtual environment:
+Install the module with:
 
-1. Configure pip, virtualenv, and virtualenvwrapper for your system:
-2. Make a virtual environment for the project:
-  * `mkvirtualenv hmm`
-3. If the environment isn't automatically activated, activate it with:
-  * `workon hmm`
-4. Install all project dependencies:
-  * `pip install -r requirements.txt`
+```
+$ python setup.py install
+```
 
-In addition, for PyEnchant to function correctly it may be necessary to 
-install `aspell-en` using your distribution's package manager.
+For PyEnchant to function correctly it may be necessary to install `aspell-en`
+using your distribution's package manager.
 
 ## Run
 
-After installing dependencies and activating the virtual environment, run
-the program with:
+After installing the module, the `hmm` script should be available:
 
-  * `python src/run.py -s STATES -t TOLERANCE`
+```
+$ run -s <states> -t <tolerance>
+```
 
-where `STATES` is the number of hidden states you wish to use for the model,
-and `TOLERANCE` is the delta at which training will terminate. For example,
+where `<states>` is the number of hidden states you wish to use for the model,
+and `<tolerance>` is the delta at which training will terminate. For example,
 
-  * `python src/run.py -s 10 -t 0.01` 
+```
+$ run -s 10 -t 0.01 # Should be quick
+```
 
-completes relatively quickly. For more help, use `-h` or `--help`. 
-
-As always, I appreciate any feedback. Thanks! 
+I appreciate any feedback. Thanks!
