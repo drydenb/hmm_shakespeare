@@ -37,14 +37,14 @@ using your distribution's package manager.
 After installing the module, the `hmm` script should be available:
 
 ```
-$ run -s <states> -t <tolerance>
+$ hmm -s <states> -t <tolerance>
 ```
 
 where `<states>` is the number of hidden states you wish to use for the model,
 and `<tolerance>` is the delta at which training will terminate. For example,
 
 ```
-$ run -s 10 -t 0.01 # Should be quick
+$ hmm -s 10 -t 0.01 # Should be quick
 ```
 
 I appreciate any feedback. Thanks!

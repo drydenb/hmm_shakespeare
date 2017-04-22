@@ -24,7 +24,7 @@ config = {
         'six==1.10.0',
     ],
     'packages': ['hmm'],
-    'scripts': ['bin/run'],
+    'scripts': ['bin/hmm'],
     'name': 'hmm',
     'package_data': {'hmm': ['resources/*.txt']}
 }
