@@ -13,9 +13,9 @@ Caltech. The project has since been completely restructured, with all old
 source code removed. The main motivation was to create a cleaner implementation 
 that utilizes a HMM without any domain specific knowledge of poetry. The result 
 is an implementation that is more representative of the strength of a HMM for
-generating poems. While this means that the poetry generated is mostly nonsense,
-it is an interesting application. The contributors to the original project at 
-Caltech were Dryden Bouamalay, Ritwik Anand, and Audrey Huang.
+generating poems, which honestly is not very impressive. The contributors to the 
+original project at Caltech were Dryden Bouamalay, Ritwik Anand, and Audrey 
+Huang.
 
 The project uses a context-free grammar (via PLY) for parsing the poems to 
 create training data. This training data is then fed to the Baum-Welch algorithm
@@ -42,9 +42,10 @@ $ hmm -s <states> -t <tolerance>
 
 where `<states>` is the number of hidden states you wish to use for the model,
 and `<tolerance>` is the delta at which training will terminate. For example,
+the following should completely quickly:
 
 ```
-$ hmm -s 10 -t 0.01 # Should be quick
+$ hmm -s 10 -t 0.01 
 ```
 
 I appreciate any feedback. Thanks!
