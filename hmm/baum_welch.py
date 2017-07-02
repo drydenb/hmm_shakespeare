@@ -11,9 +11,7 @@ from scipy.linalg import norm
 
 # transition matrix has rows as target state and columns as start state 
 def forward(S, A, O, obs):
-
-    """ 
-    Calculates the forward probability matrix F. This is a matrix where each 
+    """Calculates the forward probability matrix F. This is a matrix where each
     (i, j) entry represents P(o_1, o_2, ... o_j, X_t = i| A, O). In other words, 
     each (i, j) entry is the probability that the observed sequence is o_1, ... 
     o_j and that at position j we are in hidden state i. We build F from the 
@@ -43,29 +41,27 @@ def forward(S, A, O, obs):
     M = len(obs)                               # M is the number of observations in our sample 'obs'  
 
     C = []                                     # the list of coefficients used to normalize each column to 1 
-    F = np.zeros((L, M))                         # the foward algorithm generates an L x M matrix
-    F[:,0] = np.multiply(S, O[:,obs[0]])       # initialize the first column of F via S * (obs[0] column of B)
-    c_0 = np.sum(F[:,0])                       # compute the first normalizing coefficient
+    F = np.zeros((L, M))                       # the foward algorithm generates an L x M matrix
+    F[:, 0] = np.multiply(S, O[:, obs[0]])     # initialize the first column of F via S * (obs[0] column of B)
+    c_0 = np.sum(F[:, 0])                      # compute the first normalizing coefficient
     C.append(c_0)                              # record c_0 
-    F[:,0] = np.divide(F[:,0], c_0)            # normalize the first column so the entries sum to 1 
+    F[:, 0] = np.divide(F[:, 0], c_0)          # normalize the first column so the entries sum to 1
 
     # begin the forward algorithm. generate each subsequent column of F via the previous one, 
     # normalizing at each step
     for j in range(1, M):
-        F[:,j] = np.dot(np.multiply(A, O[:,obs[j]]), F[:,j - 1])         # compute the new column j 
-        c_j = np.sum(F[:,j])                                             # compute the jth coeff.
+        F[:, j] = np.dot(np.multiply(A, O[:,obs[j]]), F[:,j - 1])        # compute the new column j
+        c_j = np.sum(F[:, j])                                            # compute the jth coeff.
         C.append(c_j)                                                    # record the jth coeff.  
-        F[:,j] = np.divide(F[:,j], c_j)                                  # normalize column j 
+        F[:, j] = np.divide(F[:, j], c_j)                                # normalize column j
 
     # return the foward matrix F and the list of normalizing coefficients C (these will be used
     # to normalize the backward probabilities in the backward step)
     return (F, C) 
 
 
-def backward(A, O, C, obs): 
-
-    """ 
-    Calculates the backward probability matrix B. This is a matrix where each 
+def backward(A, O, C, obs):
+    """Calculates the backward probability matrix B. This is a matrix where each
     (i, j) entry represents P(o_(j + 1), o_(j + 1), ... o_M | X_t = i). Each 
     (i, j) entry is the probability that the sequence ends in o_(j + 1), 
     o_(j + 2), ... o_M where we are in hidden state i at position j. We build B 
@@ -84,29 +80,27 @@ def backward(A, O, C, obs):
     L = np.shape(A)[0]                         # L is the number of hidden states 
     M = len(obs)                               # M is the number of observations in our sample 'obs'
 
-    B = np.zeros((L, M))                         # the backward algorithm generates an L x M matrix
+    B = np.zeros((L, M))                       # the backward algorithm generates an L x M matrix
     B_MM = np.ones(L)                          # the backward algorithm is initialized with all ones 
 
     assert len(C) == M                         # number of coeff should equal length of sequence 
 
     # initialize the last column of B and then normalize with the last coefficient of C 
-    B[:,M - 1] = np.dot(np.multiply(A, O[:,obs[-1]]), B_MM)    
-    B[:,M - 1] = np.divide(B[:,M - 1], C[-1]) 
+    B[:, M - 1] = np.dot(np.multiply(A, O[:, obs[-1]]), B_MM)
+    B[:, M - 1] = np.divide(B[:, M - 1], C[-1])
     
     # goes from j = 2 to M, so M - j ranges from M - 2 to 0 (aka we work backwards starting with
     # the second to last column M - 2 to the first column 0)
     for j in range(2, M + 1):
         # compute the M - jth row via M - j + 1 and then normalize using C[M - j]
-        B[:,M - j] = np.dot(np.multiply(A, O[:,obs[M - j]]), B[:, M - j + 1])
-        B[:,M - j] = np.divide(B[:,M - j], C[M - j]) 
+        B[:, M - j] = np.dot(np.multiply(A, O[:, obs[M - j]]), B[:, M - j + 1])
+        B[:, M - j] = np.divide(B[:, M - j], C[M - j])
 
     return B
 
 
-def gamma(S, F, B): 
-
-    """
-    Computes the gamma matrix G. This is a matrix where each (i, j) entry 
+def gamma(S, F, B):
+    """Computes the gamma matrix G. This is a matrix where each (i, j) entry
     represents gamma_j(i) = P(X_j = i | o_1, ... o_M, S, A, O). This is the 
     probability that at the jth part of our training sequence we are in hidden 
     state i. 
@@ -123,28 +117,25 @@ def gamma(S, F, B):
 
     B_MM = np.ones(L)                       # recreate B_MM from backward algorithm 
 
-    F = np.hstack((S[:,np.newaxis], F))     # add to F the vector S as its first column 
-    B = np.hstack((B, B_MM[:,np.newaxis]))  # add to B the vector B_MM as its last column
+    F = np.hstack((S[:, np.newaxis], F))     # add to F the vector S as its first column
+    B = np.hstack((B, B_MM[:, np.newaxis]))  # add to B the vector B_MM as its last column
 
     assert np.shape(F) == np.shape(B)       # F and B should still be the same size 
     G = np.multiply(F, B)                   # multiply F and B entrywise to get G
 
     # renormalize 
     for i in range(M):
-        G[:,i] = np.divide(G[:,i], np.sum(G[:,i]))
+        G[:, i] = np.divide(G[:, i], np.sum(G[:, i]))
 
     # now remove the first column gamma_0 such that gamma is L x M 
-    G = G[:,1:]
+    G = G[:, 1:]
     assert np.shape(G) == (L, M)
 
     return G 
 
 
 def xi(A, O, S, F, B):
-
-    """ 
-    Computes the xi matrix E. This is a 3-dimensional matrix M x L x L
-    """ 
+    """Computes the xi matrix E. This is a 3-dimensional matrix M x L x L"""
     
     assert np.shape(F) == np.shape(B)       # F & B should have shape L x M 
     L = np.shape(F)[0]                      # the number of hidden states is L 
@@ -152,8 +143,8 @@ def xi(A, O, S, F, B):
 
     B_MM = np.ones(L)                       # recreate B_MM from backward algorithm 
 
-    F = np.hstack((S[:,np.newaxis], F))     # add to F the vector S as its first column 
-    B = np.hstack((B, B_MM[:,np.newaxis]))  # add to B the vector B_MM as its last column
+    F = np.hstack((S[:, np.newaxis], F))     # add to F the vector S as its first column
+    B = np.hstack((B, B_MM[:, np.newaxis]))  # add to B the vector B_MM as its last column
 
     # now column F_1 correpsonds to B_1, etc.
 
@@ -176,30 +167,23 @@ def xi(A, O, S, F, B):
 
 
 def difference(A, B):
-
-    """ 
-    This function compututes the difference between matrices A and O (entrywise) 
-    and then returns the Frobenius norm of their difference. This acts as a 
-    tolerance for our convergence condition.
+    """Compute the difference between matrices A and O (entrywise) and then
+    return the Frobenius norm of their difference. This acts as a tolerance
+    for our convergence condition.
     """
-
     T = A - B
     return norm(T)
 
+
 def indicator(a, b):
-
-    """
-    Make a standard indicator function.
-    """
-
+    """Make a standard indicator function."""
     if (a == b):
         return 1
     return 0 
 
-def baum_welch(L, M, obs, epsilon): 
 
-    """ 
-    Runs the Baum-Welch algorithm on a list of training sequences X. Returns 
+def baum_welch(L, M, obs, epsilon):
+    """Runs the Baum-Welch algorithm on a list of training sequences X. Returns
     trained transition and observation matrices A and O. 
 
     params:    
@@ -222,21 +206,21 @@ def baum_welch(L, M, obs, epsilon):
     # given a start state, one of the target states must be choosen so each column is normalized
     A = np.random.rand(L, L) 
     for i in range(L): 
-        A[:,i] = np.divide(A[:,i], np.sum(A[:,i]))    
+        A[:, i] = np.divide(A[:, i], np.sum(A[:, i]))
 
     # given some hidden state, there must be some observation, so every row of this matrix should
     # be normalized
     O = np.random.rand(L, M) 
     for i in range(L):
-        O[i,:] = np.divide(O[i,:], np.sum(O[i,:])) 
+        O[i, :] = np.divide(O[i, :], np.sum(O[i, :]))
     
     # for the moment, just do one step through the data 
     
     # initialize matrices for vectorization 
     A_numer = np.zeros(np.shape(A))
-    A_denom = np.ones(L)[:,None]
+    A_denom = np.ones(L)[:, None]
     O_numer = np.zeros(np.shape(O))
-    O_denom = np.ones(L)[:,None] 
+    O_denom = np.ones(L)[:, None]
 
     epoch_count = 0
 
@@ -298,8 +282,8 @@ def baum_welch(L, M, obs, epsilon):
 
         # renormalize 
         for i in range(L):
-            A[:,i] = np.divide(A[:,i], np.sum(A[:,i]))
-            O[i,:] = np.divide(O[i,:], np.sum(O[i,:]))
+            A[:, i] = np.divide(A[:, i], np.sum(A[:, i]))
+            O[i, :] = np.divide(O[i, :], np.sum(O[i, :]))
 
         # print out the difference between this iterations A, O matrices and 
         # the previous iteration's matrices
@@ -315,27 +299,22 @@ def baum_welch(L, M, obs, epsilon):
     #ENDWHILE 
 
     # return the trained transition and observation matrices (A, O)  
-    return (S,A,O) 
+    return (S, A, O)
+
 
 def check_obs(idx, obs):
-
-    """ 
-    Checks every term in every sequence of obs and sees if any term is >= idx 
-    or < 0. If true, returns false. Otherwise returns true.  
+    """Check every term in every sequence of obs and see if any term is >= idx
+    or < 0. If true, return false. Otherwise return true.
     """
-
     for o in obs: 
         for term in o: 
             if (term >= idx) or (term < 0):  
                 return False 
     return True 
 
-def find_mean_std(obs):
 
-    """
-    Calculates the mean and standard deviation.
-    """
-    
+def find_mean_std(obs):
+    """Calculate the mean and standard deviation."""
     lengths = [len(o) for o in obs]
     arr_lengths = np.array(lengths)
     mean = np.mean(arr_lengths)
