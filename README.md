@@ -13,9 +13,8 @@ Caltech. The project has since been completely restructured, with all old
 source code removed. The main motivation was to create a cleaner implementation 
 that utilizes a HMM without any domain specific knowledge of poetry. The result 
 is an implementation that is more representative of the strength of a HMM for
-generating poems, which honestly is not very impressive. The contributors to the 
-original project at Caltech were Dryden Bouamalay, Ritwik Anand, and Audrey 
-Huang.
+generating poems. The contributors to the original project at Caltech were 
+Dryden Bouamalay, Ritwik Anand, and Audrey Huang.
 
 The project uses a context-free grammar (via PLY) for parsing the poems to 
 create training data. This training data is then fed to the Baum-Welch algorithm
