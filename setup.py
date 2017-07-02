@@ -11,7 +11,7 @@ config = {
     'author': 'Dryden Bouamalay',
     'url': 'https://github.com/drydenb/hmm_shakespeare',
     'author_email': 'bouamalayd@gmail.com',
-    'version': '0.1',
+    'version': '1.0',
     'install_requires': [
         'nose',
         'appdirs==1.4.3',
