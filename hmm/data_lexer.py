@@ -39,11 +39,13 @@ t_BANG            = r'!'
 t_RETURN          = r'\n'
 t_ignore          = ' \t'    # ignore spaces and tabs 
 
+
 # numbers require a cast to int
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)    
     return t
+
 
 # for error handling 
 def t_error(t):
@@ -61,7 +63,11 @@ file_dir = os.path.dirname(os.path.realpath(__file__))
 resources_dir = os.path.join(file_dir, 'resources')
 shakespeare_file = os.path.join(resources_dir, 'shakespeare.txt')
 
-with open(shakespeare_file, 'r') as datafile:
-    data = datafile.read()
+try:
+    with open(shakespeare_file, 'r') as datafile:
+        data = datafile.read()
+except IOError:
+    print "Unable to read data file:", shakespeare_file
+    sys.exit(1)
 
 lexer.input(data)
