@@ -18,8 +18,8 @@ def flatten(lst):
 
 
 def get_data():
-    """Takes a filename containing raw poem data and produces a list of poems,
-    each of which is a list of lines containing tokens.
+    """Produce a list of poems, each of which is a list of lines containing
+    tokens.
     """
     file_dir = os.path.dirname(os.path.realpath(__file__))
     resources_dir = os.path.join(file_dir, 'resources')
@@ -39,8 +39,10 @@ def filter_data(data):
     token that isn't an English word.
     """
     en_dict = enchant.Dict("en_US")
-    for idx, d in enumerate(data):
-        data[idx] = map(lambda l: [w for w in l if en_dict.check(w)], d)
+
+    # remove words that are not standard English
+    for idx, poem in enumerate(data):
+        data[idx] = map(lambda l: [w for w in l if en_dict.check(w)], poem)
     return data
 
 
@@ -67,7 +69,7 @@ def create_training(lines, token_to_id):
     for the Baum-Welch algorithm.
     """
     for idx, line in enumerate(lines):
-        lines[idx] = map(lambda t: token_to_id[t],line)
+        lines[idx] = map(lambda t: token_to_id[t], line)
     return lines
 
 
