@@ -39,7 +39,7 @@ def main(argv):
     args = parser.parse_args()
 
     num_states = args.states
-    tolerance = args.tolerance 
+    tolerance = args.tolerance
 
     (
         num_obs, 
